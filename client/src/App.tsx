@@ -7,10 +7,15 @@ import { Dashboard } from './components/Dashboard';
 const getSocketUrl = () => {
     const hostname = window.location.hostname;
     
+    // In production (Render), use same origin
+    if (process.env.NODE_ENV === 'production') {
+        return window.location.origin;
+    }
+    
     if (hostname.includes('repl.co') || hostname.includes('replit.dev')) {
-        // In Replit, use the backend port directly
-        // Replit exposes both ports, so we can connect to :3001
-        return `${window.location.protocol}//${hostname}:3001`;
+        // In Replit, connect to the backend port directly
+        const protocol = window.location.protocol;
+        return `${protocol}//${hostname}:3001`;
     }
     
     // For local development
@@ -19,10 +24,12 @@ const getSocketUrl = () => {
 
 export const socket: Socket = io(getSocketUrl(), { 
     autoConnect: false,
-    transports: ['websocket', 'polling'], // WebSocket first for better performance
+    transports: ['polling', 'websocket'],
     reconnectionAttempts: 10,
     reconnectionDelay: 1000,
-    timeout: 20000
+    timeout: 20000,
+    withCredentials: true,
+    path: '/socket.io'
 });
 
 export type Platform = 'whatsapp' | 'signal';
