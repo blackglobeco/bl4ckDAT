@@ -1,14 +1,5 @@
-<h1 align="center">Device Activity Tracker</h1>
-<p align="center">WhatsApp & Signal Activity Tracker via RTT Analysis</p>
+<h1 align="center">bl4ckDAT</h1>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat&logo=node.js&logoColor=white" alt="Node.js"/>
-  <img src="https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript"/>
-  <img src="https://img.shields.io/badge/React-18+-61DAFB?style=flat&logo=react&logoColor=black" alt="React"/>
-  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License MIT"/>
-</p>
-
-> ⚠️ **DISCLAIMER**: Proof-of-concept for educational and security research purposes only. Demonstrates privacy vulnerabilities in WhatsApp and Signal.
 
 ## Overview
 
