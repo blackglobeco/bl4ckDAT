@@ -26,14 +26,6 @@ app.use(cors({
     credentials: true
 }));
 
-// Serve static files from React build in production
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static('client/build'));
-    app.get('*', (req, res) => {
-        res.sendFile('index.html', { root: 'client/build' });
-    });
-}
-
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
     cors: {
