@@ -439,8 +439,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 if (process.env.NODE_ENV === 'production') {
+    // Serve static files
     app.use(express.static(path.join(__dirname, '../client/build')));
-    app.get('/*', (req, res) => {
+    
+    // Fallback to index.html for client-side routing (SPA)
+    // This must be after all other routes
+    app.use((req, res) => {
         res.sendFile(path.join(__dirname, '../client/build/index.html'));
     });
 }
