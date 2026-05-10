@@ -16,9 +16,20 @@ import { pino } from 'pino';
 import { Boom } from '@hapi/boom';
 import { WhatsAppTracker, ProbeMethod } from './tracker.js';
 import { SignalTracker, getSignalAccounts, checkSignalNumber } from './signal-tracker.js';
+import { HttpsProxyAgent } from 'https-proxy-agent'; // <-- PROXY: import agent
 
 // Configuration
 const SIGNAL_API_URL = process.env.SIGNAL_API_URL || 'http://localhost:8080';
+
+// PROXY: Build agent from env var HTTPS_PROXY or HTTP_PROXY (set this in Render dashboard)
+// Format: http://user:password@proxy-host:port
+const proxyUrl = process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
+const proxyAgent = proxyUrl ? new HttpsProxyAgent(proxyUrl) : undefined;
+if (proxyUrl) {
+    console.log(`[PROXY] Using proxy: ${proxyUrl.replace(/:\/\/.*@/, '://<redacted>@')}`);
+} else {
+    console.log('[PROXY] No proxy configured. Set HTTPS_PROXY env var on Render if QR fails.');
+}
 
 const app = express();
 app.use(cors({
@@ -64,6 +75,8 @@ async function connectToWhatsApp() {
         logger: pino({ level: 'debug' }),
         markOnlineOnConnect: true,
         printQRInTerminal: false,
+        agent: proxyAgent,      // <-- PROXY: route WA WebSocket through proxy
+        fetchAgent: proxyAgent, // <-- PROXY: route WA HTTP fetches through proxy
     });
 
     sock.ev.on('connection.update', async (update: any) => {
